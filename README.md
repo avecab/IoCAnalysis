@@ -1,5 +1,7 @@
 # IoCAnalysis
 
+Herramienta de análisis automático de ficheros PE y ELF basado en Angr que genera informes en distintos formatos.
+
 ## Instalación
 
 ### Descarga utilizando Git:
