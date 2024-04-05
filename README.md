@@ -1,9 +1,9 @@
-# IoCAnalytics
+# IoCAnalysis
 
 ## Instalación
 
 ### Descarga utilizando Git:
-   `git clone https://github.com/avecab/IoCAnalytics.git`
+   `git clone https://github.com/avecab/IoCAnalysis.git`
    
 ### Creación Python Environment:
    `python -m venv /path/to/new/virtual/environment`
