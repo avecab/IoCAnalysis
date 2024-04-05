@@ -1,0 +1,218 @@
+<html>
+    <head>
+      <style>
+        table { -pdf-keep-with-next: true; }
+        html,body{margin:0;padding:0}
+        body{font: 76% arial,sans-serif;text-align:center}
+        p{margin:0 10px 10px}
+        a{padding:5px; text-decoration:none; color:#000000;}
+        div#header{background-color:#F3F2ED;}
+        div#header h1{margin:0;text-align: center;padding:50px 0}
+        div#container{text-align:left}
+        div#content p{line-height:1.4}
+        div#navigation{background:#F6F0E0;}
+        div#navigation ul{margin:15px 0; padding:0; list-style-type:none;}
+        div#navigation li{margin-bottom:5px;}
+        div#extra{background:#CCC8B3;}
+        div#footer{background:#BFBD93;}
+        div#footer p{margin:0;padding:5px 10px}
+        div#container{width:700px;margin:0 auto}
+        div#content{float:left;width:500px}
+        div#navigation{float:right;width:200px}
+        div#extra{float:right;clear:right;width:200px}
+        div#footer{clear:both;width:100%}
+      </style>
+    </head>
+    <body>
+<div id="container">
+    <table width="100%">
+        <tr><td width="100%"><div id="header"><h1>IoC Analysis: {{ filename }}</h1></td></tr></div>
+    </table>
+    <div id="wrapper">
+        <div id="content">
+            <table width="100%">
+                 <tr><td colspan="4"><div id="extra"><h1>Información</h1></div></td></tr>
+                 <tr><td colspan="4"></td></tr>
+                <tr>
+                    <td><b>Tipo:</b></td>
+                    <td>{{ fileType }}</td>
+                    <td><b>Firma:</b></td>
+                    <td>{{ packInfo }}</td>
+                </tr>
+                <tr>
+                    <td><b>Bits:</b></td>
+                    <td>{{ bits }}</td>
+                    <td><b>Arquitectura:</b></td>
+                    <td>{{ machine }}</td>
+                </tr>
+                <tr>
+                    <td><b>Endiness:</b></td>
+                    <td>{{ endianess }}</td>
+                    <td><b>Entry point:</b></td>
+                    <td>{{ entry_point_hex }}</td>
+                </tr>
+                 <tr>
+                    <td><b>Image Address:</b></td>
+                    <td>{{ base_addr_hex }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr><td colspan="4"></td></tr>
+            </table>
+            <table width="100%">
+                <tr><td colspan="3"><div id="extra"><h1>Hashes</h1></div></td></tr>
+                <tr><td colspan="3"></td></tr>
+                <tr>
+                    <td><b>MD5</b></td>
+                    <td>
+                        {{ hashes.MD5 }}
+                    </td>
+                    <td width="50%"></td>
+                </tr>
+                <tr>
+                    <td><b>SHA1</b></td>
+                    <td>
+                        {{ hashes.SHA1 }}
+                    </td>
+                    <td width="50%"></td>
+                </tr>
+                <tr>
+                    <td><b>SHA256</b></td>
+                    <td>
+                        {{ hashes.SHA256 }}
+                    </td>
+                    <td width="50%"></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><h1>Otros Hashes:</h1></td>
+                </tr>
+                <tr>
+                    <td><b>Imphash MD5</b></td>
+                    <td>
+                        {% if imphash -%}
+                            {{ imphash }}
+                        {% endif %}
+                    </td>
+                    <td width="50%"></td>
+                </tr>
+                <tr>
+                    <td><b>SSDeep</b></td>
+                    <td>
+                        {% if ssdeep_hash -%}
+                            {{ ssdeep_hash }}
+                        {% endif %}
+                    </td>
+                    <td width="50%"></td>
+                </tr>
+                <tr>
+                    <td><b>TLSH</b></td>
+                    <td>
+                        {% if tlsh_hash -%}
+                            {{ tlsh_hash }}
+                        {% endif %}
+                    </td>
+                    <td width="50%"></td>
+                </tr>
+                <tr><td colspan="3"></td></tr>
+            </table>
+            <table width="100%">
+                    <tr><td colspan="3"><div id="extra"><h1>Secciones/segmentos</h1></div></td></tr>
+                    <tr><td colspan="3"></td></tr>
+                        {% if sections|length > 0 -%}
+                            <tr>
+                                <td><b>Nombre</b></td>
+                                <td><b>Dirección</b></td>
+                                <td width="25%"></td>
+                            </tr>
+                            {% for item in sections %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.addr }}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    <tr><td colspan="3"></td></tr>
+            </table>
+            <div id="extra"><h1></h1></div>
+            <table width="100%">
+                    <tr><td colspan="4"><div id="extra"><h1>Cadenas de interés</h1></div></td></tr>
+                    <tr><td colspan="4"></td></tr>
+                    {% if strings|length > 0 -%}
+                        <tr>
+                        {% for item in strings %}
+                            {% if loop.index%5 == 0 -%}
+                                 <tr>
+                            {% endif %}
+                                    <td>{{ item }}</td>
+                            {% if loop.index%5 == 0 -%}
+                                 </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endif %}
+                    <tr><td colspan="4"></td></tr>
+            </table>
+            <table width="100%">
+                <tr><td colspan="4"><div id="extra"><h1>Símbolos</h1></div></td></tr>
+                <tr><td colspan="4"></td></tr>
+                {% if symbols|length > 0 -%}
+                    <tr>
+                        <td><b>Nombre</b></td>
+                        <td><b>Dirección</b></td>
+                        <td><b>Tipo</b></td>
+                        <td width="25%"></td>
+                    </tr>
+                    {% for item in symbols %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.addr }}</td>
+                        <td>{{ item.type }}</td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+                <tr><td colspan="4"></td></tr>
+            </table>
+            <table width="100%">
+                 <tr><td colspan="3"><div id="extra"><h1>Funciones</h1></div></td></tr>
+                 <tr><td colspan="3"></td></tr>
+                 {% if functions|length > 0 -%}
+                     <tr>
+                        <td width="20%"><b>Nombre</b></td>
+                        <td width="20%"><b>Dirección</b></td>
+                        <td width="60%"><b>Hash SSDeep</b></td>
+                    </tr>
+                    {% for item in functions %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.addr }}</td>
+                        <td>{{ item.hash_ssdeep }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+                <tr><td colspan="3"></td></tr>
+            </table>
+            <div id="extra"><h1>Control-Flow graph</h1></div>
+            <img src="{{ cfg_img }}.svg" width="100%"  height="auto"></img>
+            <table width="100%">
+                     <tr><td colspan="3"><div id="extra"><h1>Estado del proceso</h1></div></td></tr>
+                     <tr><td colspan="3"></td></tr>
+                     <tr>
+                        <td width="20%"><b>EMU CFG: {{ process.CFG_Emulated }}</b></td>
+                        <td width="20%"><b>FAST CFG: {{ process.CFG_FAST }}</b></td>
+                        <td width="60%"></td>
+                    </tr>
+                    <tr>
+                        <td>Nodos CFG: {{ process.CFG_Nodes }}</td>
+                        <td>Vertices CFG: {{ process.CFG_Edges }}</td>
+                        <td width="60%"></td>
+                    </tr>
+                    <tr><td colspan="3"></td></tr>
+                </table>
+        </div>
+    </div>
+</div>
+<div id="footer"><p>MasterCiberSeguridad 12 Edición</p></div>
+</body>
+</html>
